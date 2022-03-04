@@ -1,0 +1,179 @@
+
+{
+	"info": {
+		"_postman_id": "1f21930c-a1c2-4aac-8c71-1d58e5a4f3f6",
+		"name": "Frontend Exam API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": {\r\n        \"email\": \"test9@test.com\",\r\n        \"password\": \"test1A!asd\",\r\n        \"password_confirmation\": \"test1A!asd\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sourcepad-exam-frontend-api.herokuapp.com/api/users",
+					"protocol": "https",
+					"host": [
+						"sourcepad-exam-frontend-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiODA2NjM4YTEtMWI0YS00OGMwLWI5NmItZGJkYzY3NWI5OTY4IiwiZXhwIjoxNjM1ODI0MTE0fQ.fLSgj_-n1D6HqZ6dl1wr4nTvGJh34kZrylJqvDgkvrs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sourcepad-exam-frontend-api.herokuapp.com/api/users/806638a1-1b4a-48c0-b96b-dbdc675b9968",
+					"protocol": "https",
+					"host": [
+						"sourcepad-exam-frontend-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"users",
+						"806638a1-1b4a-48c0-b96b-dbdc675b9968"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Profile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"profile\": {\r\n        \"user_id\": \"806638a1-1b4a-48c0-b96b-dbdc675b9968\",\r\n        \"first_name\": \"Sam\",\r\n        \"last_name\": \"Pigott\",\r\n        \"phone\": \"123123\",\r\n        \"address_1\": \"test\",\r\n        \"address_2\": \"test\",\r\n        \"city\": \"test\",\r\n        \"country\": \"test\",\r\n        \"zip_code\": \"test\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sourcepad-exam-frontend-api.herokuapp.com/api/profiles",
+					"protocol": "https",
+					"host": [
+						"sourcepad-exam-frontend-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"profiles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign In",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"credentials\": {\r\n        \"email\": \"test@test.com\",\r\n        \"password\": \"test1A!asd\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sourcepad-exam-frontend-api.herokuapp.com/api/signin",
+					"protocol": "https",
+					"host": [
+						"sourcepad-exam-frontend-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Whoami",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiODA2NjM4YTEtMWI0YS00OGMwLWI5NmItZGJkYzY3NWI5OTY4IiwiZXhwIjoxNjM1ODI0MTE0fQ.fLSgj_-n1D6HqZ6dl1wr4nTvGJh34kZrylJqvDgkvrs",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://sourcepad-exam-frontend-api.herokuapp.com/api/whoami",
+					"protocol": "https",
+					"host": [
+						"sourcepad-exam-frontend-api",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"api",
+						"whoami"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

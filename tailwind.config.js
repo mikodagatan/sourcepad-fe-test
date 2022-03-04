@@ -17,7 +17,11 @@ module.exports = {
         '"Noto Color Emoji"',
       ],
     },
-    extend: {},
+    extend: {
+      height: {
+        noNav: 'calc(100vh - 64px)',
+      },
+    },
   },
   plugins: [require('@tailwindcss/typography')],
 };

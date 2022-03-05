@@ -6,7 +6,7 @@ interface ContainerLayoutProps {
 const ContainerLayout = ({ className, children }: ContainerLayoutProps) => {
   return (
     <div
-      className={`flex items-center justify-center w-screen h-screen ${className}`}
+      className={`flex items-center justify-center w-screen h-screen p-4 ${className}`}
     >
       {children}
     </div>

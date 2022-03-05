@@ -6,14 +6,17 @@ import { Link } from 'react-router-dom';
 import { LoginMachine, loginMachine } from 'store';
 import { Button } from 'components';
 
-import { siteName } from '../constants';
+import { siteName } from '../../constants';
+
+import { Navbar } from './BaseLayout.styles';
 
 const BaseLayout = () => {
-  const loggedIn = useRecoilValue(loginMachine) === LoginMachine.loggedIn;
+  const auth = useRecoilValue(loginMachine);
+  const loggedIn = auth.state === LoginMachine.loggedIn;
 
   return (
     <>
-      <nav className="w-full h-14 py-2 flex justify-between items-center bg-gray-100 shadow">
+      <Navbar>
         <div className="left pl-4 font-semibold">{siteName}</div>
         <div className="right pr-4">
           {loggedIn ? (
@@ -27,7 +30,7 @@ const BaseLayout = () => {
             </Link>
           )}
         </div>
-      </nav>
+      </Navbar>
       <Outlet />
     </>
   );

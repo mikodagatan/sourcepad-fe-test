@@ -2,10 +2,13 @@ import { atom } from 'recoil';
 
 export enum LoginMachine {
   guest = 'Guest',
-  loggedIn = 'Signed In',
+  loggedIn = 'Logged In',
 }
 
 export const loginMachine = atom({
   key: 'loginMachine',
-  default: LoginMachine.guest,
+  default: {
+    user: {},
+    state: LoginMachine.guest,
+  },
 });

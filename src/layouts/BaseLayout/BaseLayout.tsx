@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { LoginMachine, loginMachine } from 'store';
 import { Button } from 'components';
 
-import { siteName } from '../../constants';
-
 import { Navbar } from './BaseLayout.styles';
 
 const BaseLayout = () => {
@@ -17,7 +15,9 @@ const BaseLayout = () => {
   return (
     <>
       <Navbar>
-        <div className="left pl-4 font-semibold">{siteName}</div>
+        <div className="left pl-4 font-semibold">
+          {process.env.REACT_APP_SITE_NAME}
+        </div>
         <div className="right pr-4">
           {loggedIn ? (
             <div className="flex items-center">

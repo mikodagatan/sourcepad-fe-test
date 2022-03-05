@@ -23,26 +23,32 @@ interface LoginResponse {
 const useLogin = () => {
   const setLogin = useSetRecoilState(loginMachine);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<any>(null);
 
   const fetchLogin = async (user: fetchLoginParams) => {
     setLoading(true);
+    // NOTE: Wanted to use await, but the responses force me to use then.
 
-    const response = await axios.post<fetchLoginParams, LoginResponse>(
-      'signin',
-      { credentials: user }
-    );
-    console.log(response.data.data);
-    setLoading(false);
-
-    const data = response.data?.data;
-
-    if (data && data.errors) return data.errors;
-
-    setLocalStorage('token', data.authToken);
-    setLogin({ user: { email: data.email }, state: LoginMachine.loggedIn });
-    return true;
+    axios
+      .post<fetchLoginParams, LoginResponse>('signin', { credentials: user })
+      .then(({ data: { data: payload } }: LoginResponse) => {
+        setLocalStorage('token', payload.authToken);
+        setLogin({
+          user: { email: payload.email },
+          state: LoginMachine.loggedIn,
+        });
+        setAuthenticated(true);
+      })
+      .catch((error) => {
+        console.log('error', error);
+        setError(error.response.statusText);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
-  return { fetchLogin, loading };
+  return { fetchLogin, authenticated, loading, error };
 };
 
 export default useLogin;

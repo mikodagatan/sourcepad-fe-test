@@ -1,8 +1,7 @@
 import { useForm } from 'react-hook-form';
 
-import { FormContainer, Input, Button, Logo } from 'components';
+import { FormContainer, Input, Button, Logo, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
-import { siteName } from '../../../constants';
 import { emailValidation, passwordValidation } from 'utils';
 import { useNavigate } from 'react-router';
 
@@ -16,7 +15,12 @@ interface ILoginDetails {
 }
 
 const LogIn = () => {
-  const { fetchLogin, loading: authenticating } = useLogin();
+  const {
+    fetchLogin,
+    authenticated,
+    loading: authenticating,
+    error: authError,
+  } = useLogin();
   const navigate = useNavigate();
   const {
     register,
@@ -27,19 +31,29 @@ const LogIn = () => {
   });
 
   const onSubmit = async (data: ILoginDetails) => {
-    const response = await fetchLogin(data);
-    if (response === true) navigate('/profile');
+    await fetchLogin(data);
+    if (authenticated) return navigate('/profile');
+  };
+
+  const responseChanges = {
+    Unauthorized:
+      'There seems to be a problem with your email or password. ehe?',
   };
 
   return (
     <ContainerLayout className="bg-purple-300">
       <FormContainer className="">
         <div className="flex flex-col p-6">
-          <SiteName>{siteName}</SiteName>
+          <SiteName>{process.env.REACT_APP_SITE_NAME}</SiteName>
           <div className="flex justify-center">
             <Logo />
           </div>
           <Subheader>Welcome! Let's Log in</Subheader>
+          <Alert
+            status="danger"
+            message={responseChanges[authError]}
+            isOpen={authError}
+          />
           <form onSubmit={handleSubmit(onSubmit)}>
             <Input
               name="email"

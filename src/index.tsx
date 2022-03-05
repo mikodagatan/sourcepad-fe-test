@@ -3,10 +3,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import AppRoutes from './AppRoutes';
+import { RecoilRoot } from 'recoil';
+import SnackbarProvider from 'react-simple-snackbar';
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppRoutes />
+    <RecoilRoot>
+      <SnackbarProvider>
+        <AppRoutes />
+      </SnackbarProvider>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -23,23 +23,28 @@ interface LoginResponse {
 const useLogin = () => {
   const setLogin = useSetRecoilState(loginMachine);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string>();
 
   const fetchLogin = async (user: fetchLoginParams) => {
+    // NOTE: Only able to catch the error using then-catch than catch-await.
     setLoading(true);
 
-    const response = await axios.post<fetchLoginParams, LoginResponse>(
-      'signin',
-      { credentials: user }
-    );
-    console.log(response.data.data);
-    setLoading(false);
+    axios
+      .post<fetchLoginParams, LoginResponse>('signin', { credentials: user })
+      .then(({ data: { data: payload } }: LoginResponse) => {
+        setLocalStorage('token', payload.authToken);
+        setLogin({
+          user: { email: payload.email },
+          state: LoginMachine.loggedIn,
+        });
+      })
+      .catch((error) => {
+        setError(error.response?.statusText);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
 
-    const data = response.data?.data;
-
-    if (data && data.errors) return data.errors;
-
-    setLocalStorage('token', data.authToken);
-    setLogin({ user: { email: data.email }, state: LoginMachine.loggedIn });
     return true;
   };
   return { fetchLogin, loading };

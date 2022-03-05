@@ -2,11 +2,9 @@ import { useForm } from 'react-hook-form';
 
 import { FormContainer, Input, Button, Logo } from 'components';
 import { ContainerLayout } from 'layouts';
-import { siteName } from '../../../constants';
 import { emailValidation, passwordValidation } from 'utils';
 import { useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
-
+import { SignUpLink } from '../shared/AuthLinks';
 
 import { SiteName, Subheader } from './LogIn.styles';
 
@@ -37,12 +35,15 @@ const LogIn = () => {
     <ContainerLayout className="bg-purple-300">
       <FormContainer>
         <div className="flex flex-col p-6">
-          <SiteName>{siteName}</SiteName>
+          <SiteName>{process.env.REACT_APP_SITENAME}</SiteName>
           <div className="flex justify-center">
             <Logo />
           </div>
           <Subheader>Welcome! Let's Log in</Subheader>
-          <form className="flex flex-col space-y-4" onSubmit={handleSubmit(onSubmit)}>
+          <form
+            className="flex flex-col space-y-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Input
               name="email"
               placeholder="cyanide@happiness.com"
@@ -61,12 +62,7 @@ const LogIn = () => {
                 required: true,
               })}
             />
-            <div className="text-center">
-              No account? &nbsp;
-              <Link to="/signup" className="hover:underline">
-                Sign Up!
-              </Link>
-            </div>
+            <SignUpLink />
             <Button
               type="submit"
               className="mt-4 bg-purple-500 w-full"

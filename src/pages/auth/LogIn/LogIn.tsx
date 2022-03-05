@@ -1,34 +1,37 @@
 import { useForm } from 'react-hook-form';
 
-import { FormContainer, Input, Button, Logo } from 'components';
+import { FormContainer, Input, Button, Logo, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
 import { emailValidation, passwordValidation } from 'utils';
 import { useNavigate } from 'react-router';
 import { SignUpLink } from '../shared/AuthLinks';
+import { IUser } from 'services';
 
-import { SiteName, Subheader } from './LogIn.styles';
+import { SiteName, Subheader } from '../shared';
 
 import useLogin from './hooks/useLogin';
 
-interface ILoginDetails {
-  email: string;
-  password: string;
-}
-
 const LogIn = () => {
-  const { fetchLogin, loading: authenticating } = useLogin();
   const navigate = useNavigate();
+
+  const {
+    fetchLogin,
+    authenticated,
+    loading: authenticating,
+    error,
+  } = useLogin();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginDetails>({
+  } = useForm<IUser>({
     mode: 'onChange',
   });
 
-  const onSubmit = async (data: ILoginDetails) => {
-    const response = await fetchLogin(data);
-    if (response === true) navigate('/profile');
+  const onSubmit = async (data: IUser) => {
+    await fetchLogin(data);
+    if (authenticated) navigate('/profile');
   };
 
   return (
@@ -40,6 +43,7 @@ const LogIn = () => {
             <Logo />
           </div>
           <Subheader>Welcome! Let's Log in</Subheader>
+          {error && <Alert status="danger" message={error} />}
           <form
             className="flex flex-col space-y-4"
             onSubmit={handleSubmit(onSubmit)}
@@ -60,6 +64,7 @@ const LogIn = () => {
               error={errors.password?.message}
               register={register({
                 required: true,
+                pattern: passwordValidation,
               })}
             />
             <SignUpLink />

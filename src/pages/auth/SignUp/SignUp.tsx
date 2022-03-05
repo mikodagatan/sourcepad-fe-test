@@ -3,19 +3,24 @@ import { useNavigate } from 'react-router';
 
 import { FormContainer, Input, Button, Logo } from 'components';
 import { ContainerLayout } from 'layouts';
-
+import { IUser } from 'services';
 import { emailValidation, passwordValidation } from 'utils';
 
-import { LogInLink } from '../shared/AuthLinks';
+import { LogInLink, SiteName } from '../shared';
 
-interface ISignUpDetails {
-  email: string;
-  password: string;
+import CyanideImage from 'assets/images/cyanide-avatar3.png';
+
+import useSignUp from './hooks/useSignUp';
+
+interface ISignUpDetails extends IUser {
   passwordConfirmation: string;
 }
 
 const SignUp = () => {
   const navigate = useNavigate();
+
+  const { fetchSignUp, registered, loading: registering, error } = useSignUp();
+
   const {
     register,
     watch,
@@ -25,14 +30,26 @@ const SignUp = () => {
     mode: 'onChange',
   });
 
-  const onSubmit = () => {};
+  const onSubmit = async (data: ISignUpDetails) => {
+    await fetchSignUp(data);
+    if (registered) navigate('/profile');
+  };
 
   return (
     <ContainerLayout className="bg-emerald-300">
       <FormContainer>
         <div className="p-6 flex-flex-col">
-          <h1 className="text-lg font-bold">Register</h1>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <SiteName>{process.env.REACT_APP_SITENAME}</SiteName>
+          <div className="flex justify-center">
+            <div className="flex justify-center pb-3">
+              <img src={CyanideImage} className="w-32" />
+            </div>
+          </div>
+          <div className="text-center text-xs ">Join us. Woooooo!</div>
+          <form
+            className="flex flex-col space-y-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Input
               name="email"
               placeholder="cyanide@happiness.com"

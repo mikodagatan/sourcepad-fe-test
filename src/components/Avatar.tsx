@@ -1,10 +1,12 @@
 import CyanideAvatar1 from 'assets/images/cyanide-avatar1.jpeg';
 import CyanideAvatar2 from 'assets/images/cyanide-avatar2.png';
+import CyanideAvatar3 from 'assets/images/cyanide-avatar3.png';
+
 import { sample } from 'lodash';
 
 const Avatar = () => {
   const randomAvatar = () => {
-    const avatars = [CyanideAvatar1, CyanideAvatar2];
+    const avatars = [CyanideAvatar1, CyanideAvatar2, CyanideAvatar3];
     return sample(avatars);
   };
 

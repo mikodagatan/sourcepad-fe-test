@@ -5,6 +5,8 @@ import { ContainerLayout } from 'layouts';
 import { siteName } from '../../../constants';
 import { emailValidation, passwordValidation } from 'utils';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
+
 
 import { SiteName, Subheader } from './LogIn.styles';
 
@@ -33,14 +35,14 @@ const LogIn = () => {
 
   return (
     <ContainerLayout className="bg-purple-300">
-      <FormContainer className="">
+      <FormContainer>
         <div className="flex flex-col p-6">
           <SiteName>{siteName}</SiteName>
           <div className="flex justify-center">
             <Logo />
           </div>
           <Subheader>Welcome! Let's Log in</Subheader>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className="flex flex-col space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <Input
               name="email"
               placeholder="cyanide@happiness.com"
@@ -59,7 +61,14 @@ const LogIn = () => {
                 required: true,
               })}
             />
+            <div className="text-center">
+              No account? &nbsp;
+              <Link to="/signup" className="hover:underline">
+                Sign Up!
+              </Link>
+            </div>
             <Button
+              type="submit"
               className="mt-4 bg-purple-500 w-full"
               disabled={authenticating}
             >

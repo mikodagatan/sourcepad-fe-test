@@ -3,6 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 import AppRoutes from './AppRoutes';
+import { getLocalStorage } from 'utils';
+import { loginMachine, LoginMachine } from 'store';
+import { useSetRecoilState } from 'recoil';
+
+const token = getLocalStorage('token', null);
+const user = getLocalStorage('user', null);
+if (token && user) {
+  const setLoginState = useSetRecoilState(loginMachine);
+  setLoginState({
+    user: { email: user },
+    state: LoginMachine.loggedIn,
+  });
+}
 
 ReactDOM.render(
   <React.StrictMode>

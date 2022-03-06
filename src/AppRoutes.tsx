@@ -4,13 +4,9 @@ import { RecoilRoot } from 'recoil';
 
 import { BaseLayout } from 'layouts';
 import { Home, SignUp, LogIn, Profile, CreateProfile } from 'pages';
-import useLogin from 'pages/auth/LogIn/hooks/useLogin';
 
 const AppRoutes = () => {
-  const { checkLogin } = useLogin();
-  React.useEffect(() => {
-    checkLogin();
-  }, []);
+  const authenticated: boolean = !!localStorage.getItem('token');
 
   return (
     <RecoilRoot>

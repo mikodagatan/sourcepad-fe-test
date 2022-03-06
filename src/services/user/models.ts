@@ -10,3 +10,8 @@ export interface IProfile {
   lastName: string;
   phone: string;
 }
+
+export interface IUser {
+  email: string;
+  password: string;
+}

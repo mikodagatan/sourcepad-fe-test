@@ -16,7 +16,7 @@ const BaseLayout = () => {
     <>
       <Navbar>
         <div className="left pl-4 font-semibold">
-          {process.env.REACT_APP_SITE_NAME}
+          {process.env.REACT_APP_SITENAME}
         </div>
         <div className="right pr-4">
           {loggedIn ? (

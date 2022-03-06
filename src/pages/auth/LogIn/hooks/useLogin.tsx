@@ -3,14 +3,10 @@ import { axios } from 'config';
 
 import { useSetRecoilState } from 'recoil';
 import { LoginMachine, loginMachine } from 'store';
-import { setLocalStorage } from 'utils';
+import { getLocalStorage, setLocalStorage } from 'utils';
+import { IUser } from 'services';
 
-interface fetchLoginParams {
-  email: string;
-  password: string;
-}
-
-interface LoginResponse {
+interface ILoginResponse {
   data: {
     data: {
       email: string;
@@ -24,31 +20,56 @@ const useLogin = () => {
   const setLogin = useSetRecoilState(loginMachine);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [authenticated, setAuthenticated] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<any>(null);
+  const [error, setError] = React.useState<string>();
 
-  const fetchLogin = async (user: fetchLoginParams) => {
-    setLoading(true);
-    // NOTE: Wanted to use await, but the responses force me to use then.
+  const fetchLogin = async (user: IUser) => {
+    // NOTE: Only able to catch the error using then-catch than catch-await.
+    setInitialState();
+
+    if (checkLogin()) return;
 
     axios
-      .post<fetchLoginParams, LoginResponse>('signin', { credentials: user })
-      .then(({ data: { data: payload } }: LoginResponse) => {
+      .post<IUser, ILoginResponse>('signin', { credentials: user })
+      .then(({ data: { data: payload } }: ILoginResponse) => {
         setLocalStorage('token', payload.authToken);
-        setLogin({
-          user: { email: payload.email },
-          state: LoginMachine.loggedIn,
-        });
+        setLocalStorage('user', payload.email);
+        setLoginState(payload.email);
         setAuthenticated(true);
+        console.log('auth', authenticated);
       })
       .catch((error) => {
-        console.log('error', error);
-        setError(error.response.statusText);
+        setError(error.response?.statusText);
       })
       .finally(() => {
         setLoading(false);
       });
   };
-  return { fetchLogin, authenticated, loading, error };
+
+  const checkLogin = () => {
+    console.log('check login');
+    const userEmail = getLocalStorage('user', null);
+    const authToken = getLocalStorage('token', null);
+    if (userEmail || authToken) {
+      setLoginState(userEmail);
+      return true;
+    }
+    return false;
+  };
+
+  const setLoginState = (email: string) => {
+    setLogin({
+      user: { email: email },
+      state: LoginMachine.loggedIn,
+    });
+  };
+
+  const setInitialState = () => {
+    setLoading(true);
+    setAuthenticated(false);
+    setError(undefined);
+  };
+
+  return { fetchLogin, checkLogin, authenticated, loading, error };
 };
 
 export default useLogin;

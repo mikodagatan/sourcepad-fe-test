@@ -1,60 +1,61 @@
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { FormContainer, Input, Button, Logo, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
-import { emailValidation, passwordValidation } from 'utils';
+import { emailValidation, authErrors, getLocalStorage } from 'utils';
 import { useNavigate } from 'react-router';
+import { SignUpLink } from '../shared/AuthLinks';
+import { IUser } from 'services';
 
-import { SiteName, Subheader } from './LogIn.styles';
+import { SiteName, Subheader } from '../shared';
 
 import useLogin from './hooks/useLogin';
 
-interface ILoginDetails {
-  email: string;
-  password: string;
-}
-
 const LogIn = () => {
+  const navigate = useNavigate();
+
   const {
     fetchLogin,
+    checkLogin,
     authenticated,
     loading: authenticating,
-    error: authError,
+    error,
   } = useLogin();
-  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginDetails>({
+  } = useForm<IUser>({
     mode: 'onChange',
   });
 
-  const onSubmit = async (data: ILoginDetails) => {
-    await fetchLogin(data);
-    if (authenticated) return navigate('/profile');
-  };
+  React.useEffect(() => {
+    if (checkLogin()) {
+      navigate('/profile');
+    }
+  }, []);
 
-  const responseChanges = {
-    Unauthorized:
-      'There seems to be a problem with your email or password. ehe?',
+  const onSubmit = async (data: IUser) => {
+    await fetchLogin(data);
+    if (authenticated) navigate('/profile');
   };
 
   return (
     <ContainerLayout className="bg-purple-300">
-      <FormContainer className="">
+      <FormContainer>
         <div className="flex flex-col p-6">
-          <SiteName>{process.env.REACT_APP_SITE_NAME}</SiteName>
+          <SiteName>{process.env.REACT_APP_SITENAME}</SiteName>
           <div className="flex justify-center">
             <Logo />
           </div>
           <Subheader>Welcome! Let's Log in</Subheader>
-          <Alert
-            status="danger"
-            message={responseChanges[authError]}
-            isOpen={authError}
-          />
-          <form onSubmit={handleSubmit(onSubmit)}>
+          {error && <Alert status="danger" message={authErrors[error]} />}
+          <form
+            className="flex flex-col space-y-4"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <Input
               name="email"
               placeholder="cyanide@happiness.com"
@@ -73,6 +74,7 @@ const LogIn = () => {
                 required: true,
               })}
             />
+            <SignUpLink />
             <Button
               className="mt-4 bg-purple-500 w-full"
               disabled={authenticating}

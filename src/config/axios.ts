@@ -1,12 +1,14 @@
-import axiosMain from 'axios';
+import axiosMain, { AxiosInstance } from 'axios';
 import applyCaseMiddleware from 'axios-case-converter';
 import { getLocalStorage } from 'utils';
 
-const axiosBase = axiosMain.create({ baseURL: process.env.REACT_APP_API_URL });
+const axiosBase = axiosMain.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
 
 const axios = applyCaseMiddleware(axiosBase);
 
-const axiosAuth = () => {
+const axiosAuth = (): AxiosInstance => {
   const instance = axiosBase;
 
   instance.interceptors.request.use((config) => {

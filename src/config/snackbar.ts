@@ -1,6 +1,7 @@
 export const snackbarDefault = {
   position: 'top-right',
   style: {
-    backgroundColor: "theme('colors.purple-400)",
+    backgroundColor: '#50C878',
+    color: 'white',
   },
 };

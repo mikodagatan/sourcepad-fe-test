@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
+import { useSnackbar } from 'react-simple-snackbar';
+import { snackbarDefault } from 'config';
 
-import { FormContainer, Input, Button, Alert } from 'components';
+import { FormContainer, Input, Button } from 'components';
 import { ContainerLayout } from 'layouts';
 import { IUser } from 'services';
 import { emailValidation, passwordValidation, getErrors } from 'utils';
@@ -18,10 +20,10 @@ interface ISignUpDetails extends IUser {
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const [openSnackbar] = useSnackbar(snackbarDefault);
 
   const {
     fetchSignUp,
-    registered,
     loading: registering,
     errors: signUpErrors,
   } = useSignUp();
@@ -36,8 +38,11 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data: ISignUpDetails) => {
-    await fetchSignUp(data);
-    if (registered) navigate('/login');
+    const result = await fetchSignUp(data);
+    if (result) {
+      navigate('/login');
+      openSnackbar('Successfully registered');
+    }
   };
 
   return (
@@ -47,12 +52,12 @@ const SignUp = () => {
           <SiteName>{process.env.REACT_APP_SITENAME}</SiteName>
           <div className="flex justify-center">
             <div className="flex justify-center pb-3">
-              <img src={CyanideImage} className="w-32" />
+              <img src={CyanideImage} alt="make new bros" className="w-32" />
             </div>
           </div>
           <div className="text-center text-xs ">Join us. Woooooo!</div>
           <form
-            className="flex flex-col space-y-4"
+            className="flex flex-col space-y-3"
             onSubmit={handleSubmit(onSubmit)}
           >
             <Input
@@ -60,7 +65,7 @@ const SignUp = () => {
               placeholder="cyanide@happiness.com"
               error={errors.email?.message || getErrors(signUpErrors?.email)}
               register={register({
-                required: true,
+                required: 'This is a required field',
                 pattern: emailValidation,
               })}
             />
@@ -70,7 +75,7 @@ const SignUp = () => {
               placeholder="Your password"
               error={errors.password?.message}
               register={register({
-                required: true,
+                required: 'This is a required field',
                 pattern: passwordValidation,
               })}
             />
@@ -80,7 +85,7 @@ const SignUp = () => {
               placeholder="Password confirmation"
               error={errors.passwordConfirmation?.message}
               register={register({
-                required: true,
+                required: 'This is a required field',
                 validate: (v) => {
                   return v === watch('password') || 'Passwords do not match';
                 },

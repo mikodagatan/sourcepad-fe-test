@@ -55,7 +55,7 @@ const LogIn = () => {
               placeholder="cyanide@happiness.com"
               error={errors.email?.message}
               register={register({
-                required: true,
+                required: 'This is a required field',
                 pattern: emailValidation,
               })}
             />
@@ -65,7 +65,7 @@ const LogIn = () => {
               placeholder="Tip. It's a secret"
               error={errors.password?.message}
               register={register({
-                required: true,
+                required: 'This is a required field',
               })}
             />
             <SignUpLink />

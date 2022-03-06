@@ -7,8 +7,10 @@ interface IUserSignUp extends IUser {
 }
 
 interface ISignUpResponse {
-  id: string;
-  email: string;
+  data: {
+    id: string;
+    email: string;
+  };
 }
 
 interface ISignUpErrors {
@@ -20,25 +22,28 @@ interface ISignUpErrors {
 const useSignUp = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [errors, setErrors] = React.useState<ISignUpErrors>();
-  const [registered, setRegistered] = React.useState<boolean>(false);
 
   const fetchSignUp = async (user: IUserSignUp) => {
     setLoading(true);
 
-    axios
+    const result = axios
       .post<IUserSignUp, ISignUpResponse>('users', { user: user })
-      .then(({ id }: ISignUpResponse) => {
-        if (id) setRegistered(true);
+      .then(({ data: { id } }: ISignUpResponse) => {
+        console.log('id', id);
+        if (id) return true;
       })
       .catch((errors) => {
         setErrors(errors.response.data.errors);
+        return false;
       })
       .finally(() => {
         setLoading(false);
       });
+
+    return result;
   };
 
-  return { fetchSignUp, registered, loading, errors };
+  return { fetchSignUp, loading, errors };
 };
 
 export default useSignUp;

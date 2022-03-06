@@ -29,7 +29,7 @@ const Input = ({
         ref={register}
         {...rest}
       />
-      {error && <div className="text-red-500 text-xs pl-2">{error}</div>}
+      <div className="text-red-500 text-xs pl-2">{error}</div>
     </div>
   );
 };

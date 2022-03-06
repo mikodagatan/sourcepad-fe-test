@@ -2,7 +2,7 @@ import tw from 'tailwind-styled-components';
 
 export const Navbar = tw.nav`
   w-full 
-  h-14 
+  h-[64px] 
   py-2
 
   flex 

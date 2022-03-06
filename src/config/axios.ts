@@ -8,17 +8,19 @@ const axiosBase = axiosMain.create({
 
 const axios = applyCaseMiddleware(axiosBase);
 
-const axiosAuth = (): AxiosInstance => {
+const axiosAuth = () => {
   const instance = axiosBase;
+  const authToken = getLocalStorage('token', null);
 
-  instance.interceptors.request.use((config) => {
-    const authToken = getLocalStorage('token', null);
+  if (!authToken) return instance;
+  instance.interceptors.request.use((request) => {
+    if (!request.headers) {
+      console.log('No config headers');
+      return request;
+    }
 
-    if (!config.headers) return console.log('No config headers for Auth');
-
-    if (!authToken) return console.log('No Auth token');
-
-    config.headers.Authorization = `Bearer ${authToken}`;
+    request.headers.Authorization = authToken ? `Bearer ${authToken}` : '';
+    return request;
   });
 
   return instance;

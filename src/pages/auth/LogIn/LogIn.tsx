@@ -15,13 +15,7 @@ import { useAuth } from 'hooks';
 const LogIn = () => {
   const navigate = useNavigate();
 
-  const {
-    fetchLogin,
-    checkLogin,
-    authenticated,
-    loading: authenticating,
-    error,
-  } = useAuth();
+  const { fetchLogin, checkLogin, loading: authenticating, error } = useAuth();
 
   const {
     register,
@@ -38,8 +32,8 @@ const LogIn = () => {
   }, []);
 
   const onSubmit = async (data: IUser) => {
-    await fetchLogin(data);
-    if (authenticated) navigate('/profile');
+    const result = await fetchLogin(data);
+    if (result) navigate('/profile');
   };
 
   return (

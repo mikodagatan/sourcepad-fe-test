@@ -19,7 +19,6 @@ interface ILoginResponse {
 const useAuth = () => {
   const setLogin = useSetRecoilState(loginMachine);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [authenticated, setAuthenticated] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
 
   const fetchLogin = async (user: IUser) => {
@@ -28,30 +27,31 @@ const useAuth = () => {
 
     if (checkLogin()) return;
 
-    axios
+    const result = axios
       .post<IUser, ILoginResponse>('signin', { credentials: user })
       .then(({ data: { data: payload } }: ILoginResponse) => {
         setAuthStates(payload.authToken, payload.email);
-        setAuthenticated(true);
-        console.log('auth', authenticated);
+        return true;
       })
       .catch((error) => {
         setError(error.response?.statusText);
+        return false;
       })
       .finally(() => {
         setLoading(false);
       });
+
+    return result;
   };
 
   const setInitialState = () => {
     setLoading(true);
-    setAuthenticated(false);
     setError(undefined);
   };
 
   const setAuthStates = (authToken: string, email: string) => {
-    setLocalStorage('token', JSON.stringify(authToken));
-    setLocalStorage('user', JSON.stringify(email));
+    setLocalStorage('token', authToken);
+    setLocalStorage('user', email);
     setLoginState(email);
   };
 
@@ -80,7 +80,7 @@ const useAuth = () => {
     clearLocalStorage();
   };
 
-  return { fetchLogin, checkLogin, logOut, authenticated, loading, error };
+  return { fetchLogin, checkLogin, logOut, loading, error };
 };
 
 export default useAuth;

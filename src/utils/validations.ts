@@ -9,7 +9,7 @@ export const alphaNumericValidation = {
 };
 
 export const numericValidation = {
-  value: /^[A-Za-z0-9\s]*$/,
+  value: /^[0-9\s]*$/,
   message: 'This should only contain numbers',
 };
 

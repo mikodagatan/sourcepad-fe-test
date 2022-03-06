@@ -16,10 +16,7 @@ const Step1 = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({
-    mode: 'onChange',
-    defaultValues: profile,
-  });
+  } = useForm({ mode: 'onChange', defaultValues: profile });
 
   // slice(profile, 'firstName', 'lastName', 'phone')
 
@@ -54,6 +51,7 @@ const Step1 = () => {
         error={errors.phone?.message}
         register={register({
           required: 'This is a required field',
+          pattern: phoneNumberValidation,
         })}
       />
 

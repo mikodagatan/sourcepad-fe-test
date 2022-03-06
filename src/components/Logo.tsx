@@ -6,7 +6,7 @@ interface LogoParams {
 
 const Logo = ({ size = 'md' }: LogoParams) => {
   const sizeClass = {
-    sm: 'h-16 w-16',
+    sm: 'h-10 w-10',
     md: 'h-24 w-24',
   };
   return <img src={LogoImg} alt="Logo" className={`my-2 ${sizeClass[size]}`} />;

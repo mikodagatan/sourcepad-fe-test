@@ -1,5 +1,7 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { Avatar, Button } from 'components';
+import { useSnackbar } from 'react-simple-snackbar';
+import { snackbarDefault } from 'config';
+import { Avatar, Button, Logo } from 'components';
 import { useRecoilValue } from 'recoil';
 import { LoginMachine, loginMachine, profileState } from 'store';
 import { useAuth } from 'hooks';
@@ -11,12 +13,14 @@ const BaseLayout = () => {
   const navigate = useNavigate();
   const auth = useRecoilValue(loginMachine);
   const profile = useRecoilValue(profileState);
+  const [openSnackbar] = useSnackbar(snackbarDefault);
 
   const loggedIn = auth.state === LoginMachine.loggedIn;
   const { logOut } = useAuth();
 
   const handleLogOut = () => {
     logOut();
+    openSnackbar('Logged out successfully');
     navigate('/');
   };
 
@@ -27,7 +31,12 @@ const BaseLayout = () => {
   return (
     <>
       <Navbar>
-        <NavbarLeft>{process.env.REACT_APP_SITENAME}</NavbarLeft>
+        <NavbarLeft>
+          <div className="text-lg font-bold flex items-center">
+            <Logo size="sm" />
+            <div className="pl-2">{process.env.REACT_APP_SITENAME}</div>
+          </div>
+        </NavbarLeft>
         <NavbarRight>
           {loggedIn ? (
             <div className="flex space-x-4 items-center">
@@ -36,7 +45,10 @@ const BaseLayout = () => {
                 <span className="ml-2">{fullName || auth.user}</span>
               </div>
               <div>
-                <Button className="bg-gray-500" onClick={handleLogOut}>
+                <Button
+                  className="bg-gray-400 hover:bg-gray-500"
+                  onClick={handleLogOut}
+                >
                   Log out
                 </Button>
               </div>

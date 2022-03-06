@@ -12,9 +12,11 @@ function App() {
   const { fetchWhoAmI } = useWhoAmI();
 
   React.useEffect(() => {
+    console.log('starting', login);
     const checkLogin = async () => {
       const loggedIn = login.state === LoginMachine.loggedIn;
-      if (loggedIn && !profile.id) {
+      if (!loggedIn) return navigate('/');
+      if (!profile.id) {
         const result = await fetchWhoAmI();
         if (!result) navigate('/profile/create');
       }

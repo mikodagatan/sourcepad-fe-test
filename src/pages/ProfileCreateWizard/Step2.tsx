@@ -29,7 +29,7 @@ const Step2 = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ mode: 'onChange' });
+  } = useForm({ mode: 'onChange', defaultValues: profile });
 
   const onSubmit = async (data) => {
     console.log('userId', login);

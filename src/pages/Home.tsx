@@ -1,7 +1,9 @@
 const Home = () => {
   return (
     <div className="h-noNav w-full flex flex-col justify-center items-center">
-      <p className="text-gray-500 text-[100px] pb-2">Hello World!</p>
+      <p className="text-gray-500 text-[64px] pb-2 text-center md:text-left">
+        Welcome!
+      </p>
       <p>This an app with the following tech stack:</p>
       <ul className="pt-4 ">
         <li>React</li>

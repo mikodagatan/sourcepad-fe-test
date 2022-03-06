@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 
-import { FormContainer, Input, Button, Logo } from 'components';
+import { FormContainer, Input, Button, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
 import { IUser } from 'services';
-import { emailValidation, passwordValidation } from 'utils';
+import { emailValidation, passwordValidation, getErrors } from 'utils';
 
 import { LogInLink, SiteName } from '../shared';
 
@@ -19,7 +19,12 @@ interface ISignUpDetails extends IUser {
 const SignUp = () => {
   const navigate = useNavigate();
 
-  const { fetchSignUp, registered, loading: registering, error } = useSignUp();
+  const {
+    fetchSignUp,
+    registered,
+    loading: registering,
+    errors: signUpErrors,
+  } = useSignUp();
 
   const {
     register,
@@ -32,7 +37,7 @@ const SignUp = () => {
 
   const onSubmit = async (data: ISignUpDetails) => {
     await fetchSignUp(data);
-    if (registered) navigate('/profile');
+    if (registered) navigate('/login');
   };
 
   return (
@@ -53,7 +58,7 @@ const SignUp = () => {
             <Input
               name="email"
               placeholder="cyanide@happiness.com"
-              error={errors.email?.message}
+              error={errors.email?.message || getErrors(signUpErrors?.email)}
               register={register({
                 required: true,
                 pattern: emailValidation,
@@ -82,7 +87,11 @@ const SignUp = () => {
               })}
             />
             <LogInLink />
-            <Button type="submit" className="mt-4 bg-purple-500 w-full">
+            <Button
+              type="submit"
+              className="mt-4 bg-purple-500 w-full"
+              disabled={registering}
+            >
               Register
             </Button>
           </form>

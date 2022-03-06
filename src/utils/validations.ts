@@ -5,7 +5,8 @@ export const emailValidation = {
 };
 
 export const passwordValidation = {
-  value: /^(?=.*\d)(?=.*[!@#$%^&*-=])(?=.*[a-z])(?=.*[A-Z]).{8,}$/,
+  value:
+    /^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[a-zA-Z!#$%&?-])[a-zA-Z0-9!#$%&?-]{8,20}$/,
   message:
     'Minimum eight characters, at least one letter, one number and one special character',
 };

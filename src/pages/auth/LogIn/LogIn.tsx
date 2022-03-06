@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 
 import { FormContainer, Input, Button, Logo, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
-import { emailValidation, passwordValidation } from 'utils';
+import { emailValidation, authErrors } from 'utils';
 import { useNavigate } from 'react-router';
 import { SignUpLink } from '../shared/AuthLinks';
 import { IUser } from 'services';
@@ -43,7 +43,7 @@ const LogIn = () => {
             <Logo />
           </div>
           <Subheader>Welcome! Let's Log in</Subheader>
-          {error && <Alert status="danger" message={error} />}
+          {error && <Alert status="danger" message={authErrors[error]} />}
           <form
             className="flex flex-col space-y-4"
             onSubmit={handleSubmit(onSubmit)}
@@ -64,7 +64,6 @@ const LogIn = () => {
               error={errors.password?.message}
               register={register({
                 required: true,
-                pattern: passwordValidation,
               })}
             />
             <SignUpLink />

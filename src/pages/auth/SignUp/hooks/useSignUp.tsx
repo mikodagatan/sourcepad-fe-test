@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { axios } from 'config';
-import { useSetRecoilState } from 'recoil';
-import { setLocalStorage } from 'utils';
 import { IUser } from 'services';
 
 interface IUserSignUp extends IUser {
@@ -13,9 +11,15 @@ interface SignUpResponse {
   email: string;
 }
 
+interface ISignUpErrors {
+  email?: string[];
+  password?: string[];
+  passwordConfirmation?: string[];
+}
+
 const useSignUp = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [error, setError] = React.useState<string>();
+  const [errors, setErrors] = React.useState<ISignUpErrors>();
   const [registered, setRegistered] = React.useState<boolean>(false);
 
   const fetchSignUp = async (user: IUserSignUp) => {
@@ -23,18 +27,19 @@ const useSignUp = () => {
 
     axios
       .post<IUserSignUp, SignUpResponse>('users', { user: user })
-      .then(({ id, email }: SignUpResponse) => {
+      .then(({ id }: SignUpResponse) => {
         if (id) setRegistered(true);
       })
-      .catch((error) => {
-        setError(error.response?.statusText);
+      .catch((errors) => {
+        console.log(errors.response.data.errors);
+        setErrors(errors.response.data.errors);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  return { fetchSignUp, registered, loading, error };
+  return { fetchSignUp, registered, loading, errors };
 };
 
 export default useSignUp;

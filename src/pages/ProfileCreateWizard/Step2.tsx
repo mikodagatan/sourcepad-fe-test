@@ -40,7 +40,9 @@ const Step2 = () => {
     });
     console.log('change profile', result);
     if (result) {
-      setProfile({ ...data, userId: login.userId });
+      setProfile((prev) => {
+        return { ...prev, ...data, userId: login.userId };
+      });
       openSnackbar('Profile successfully created');
       navigate('/profile');
     }

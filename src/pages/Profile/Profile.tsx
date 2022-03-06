@@ -1,23 +1,10 @@
 import * as React from 'react';
-import useWhoAmI from 'hooks/useWhoAmI';
 import { useRecoilValue } from 'recoil';
-import { useNavigate } from 'react-router';
 
 import { profileState } from 'store';
 
 const Profile = () => {
-  const navigate = useNavigate();
-  const { fetchWhoAmI } = useWhoAmI();
   const profile = useRecoilValue(profileState);
-
-  React.useEffect(() => {
-    const asyncFunction = async () => {
-      const result = await fetchWhoAmI();
-      if (!result) navigate('/profile/create');
-    };
-
-    asyncFunction();
-  }, []); // @ts-ignore react-hooks/exhaustive-deps
 
   return (
     <div className="flex justify-center items-center h-noNav">

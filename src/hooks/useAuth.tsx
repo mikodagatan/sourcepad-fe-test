@@ -31,8 +31,6 @@ const useAuth = () => {
     // NOTE: Only able to catch the error using then-catch than catch-await.
     setInitialState();
 
-    if (checkLogin()) return;
-
     const result = axios
       .post<IUser, ILoginResponse>('signin', { credentials: user })
       .then(async ({ data: { data: payload } }: ILoginResponse) => {
@@ -41,7 +39,7 @@ const useAuth = () => {
       })
       .catch((error) => {
         setError(error.response?.statusText);
-        return { loggedIn: false, profile: false };
+        return false;
       })
       .finally(() => {
         setLoading(false);

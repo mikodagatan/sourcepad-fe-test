@@ -8,23 +8,14 @@ const axiosBase = axiosMain.create({
 
 const axios = applyCaseMiddleware(axiosBase);
 
-const axiosAuth = () => {
-  const instance = axiosBase;
+const requestHandler = (request) => {
+  // NOTE: using any type because of JWT token problem if using AxiosRequestConfig<any>.
   const authToken = getLocalStorage('token', null);
-  console.log('axios authToken', authToken);
-
-  if (!authToken) return instance;
-  instance.interceptors.request.use((request) => {
-    if (!request.headers) {
-      console.log('No config headers');
-      return request;
-    }
-
-    request.headers.Authorization = `Bearer ${authToken}`;
-    return request;
-  });
-
-  return instance;
+  console.log('axios request handler', authToken, localStorage);
+  request.headers.Authorization = `Bearer ${authToken}`;
+  return request;
 };
 
-export { axios, axiosAuth };
+axios.interceptors.request.use((request) => requestHandler(request));
+
+export { axios };

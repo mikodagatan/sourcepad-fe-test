@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { axiosAuth } from 'config';
+import { axios } from 'config';
 import { useSetRecoilState } from 'recoil';
 
 import { loginMachine, profileState } from 'store';
@@ -14,7 +14,7 @@ const useWhoAmI = () => {
   const fetchWhoAmI = async () => {
     setLoading(true);
 
-    const whoAmIdata = axiosAuth()
+    const whoAmIdata = axios
       .get('/whoami')
       .then((response) => {
         console.log('whoami user id', response.data);
@@ -25,6 +25,7 @@ const useWhoAmI = () => {
         console.log('response whoami', response.data);
 
         if (!response.data.profile.id) return false;
+        console.log('changing profile whoami');
         setProfileState(response.data.profile);
 
         return true;

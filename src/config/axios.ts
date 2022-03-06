@@ -19,7 +19,6 @@ const axiosAuth = (): AxiosInstance => {
     if (!authToken) return console.log('No Auth token');
 
     config.headers.Authorization = `Bearer ${authToken}`;
-    return config;
   });
 
   return instance;

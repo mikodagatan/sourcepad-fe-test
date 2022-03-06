@@ -1,8 +1,9 @@
+import * as React from 'react';
 import { useForm } from 'react-hook-form';
 
 import { FormContainer, Input, Button, Logo, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
-import { emailValidation, authErrors } from 'utils';
+import { emailValidation, authErrors, getLocalStorage } from 'utils';
 import { useNavigate } from 'react-router';
 import { SignUpLink } from '../shared/AuthLinks';
 import { IUser } from 'services';
@@ -16,6 +17,7 @@ const LogIn = () => {
 
   const {
     fetchLogin,
+    checkLogin,
     authenticated,
     loading: authenticating,
     error,
@@ -28,6 +30,12 @@ const LogIn = () => {
   } = useForm<IUser>({
     mode: 'onChange',
   });
+
+  React.useEffect(() => {
+    if (checkLogin()) {
+      navigate('/profile');
+    }
+  }, []);
 
   const onSubmit = async (data: IUser) => {
     await fetchLogin(data);
@@ -68,7 +76,6 @@ const LogIn = () => {
             />
             <SignUpLink />
             <Button
-              type="submit"
               className="mt-4 bg-purple-500 w-full"
               disabled={authenticating}
             >

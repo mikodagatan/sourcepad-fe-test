@@ -3,10 +3,10 @@ import { axios } from 'config';
 
 import { useSetRecoilState } from 'recoil';
 import { LoginMachine, loginMachine } from 'store';
-import { setLocalStorage } from 'utils';
+import { getLocalStorage, setLocalStorage } from 'utils';
 import { IUser } from 'services';
 
-interface LoginResponse {
+interface ILoginResponse {
   data: {
     data: {
       email: string;
@@ -24,18 +24,18 @@ const useLogin = () => {
 
   const fetchLogin = async (user: IUser) => {
     // NOTE: Only able to catch the error using then-catch than catch-await.
-    setLoading(true);
-    setAuthenticated(false);
+    setInitialState();
+
+    if (checkLogin()) return;
 
     axios
-      .post<IUser, LoginResponse>('signin', { credentials: user })
-      .then(({ data: { data: payload } }: LoginResponse) => {
+      .post<IUser, ILoginResponse>('signin', { credentials: user })
+      .then(({ data: { data: payload } }: ILoginResponse) => {
         setLocalStorage('token', payload.authToken);
-        setLogin({
-          user: { email: payload.email },
-          state: LoginMachine.loggedIn,
-        });
+        setLocalStorage('user', payload.email);
+        setLoginState(payload.email);
         setAuthenticated(true);
+        console.log('auth', authenticated);
       })
       .catch((error) => {
         setError(error.response?.statusText);
@@ -44,7 +44,32 @@ const useLogin = () => {
         setLoading(false);
       });
   };
-  return { fetchLogin, authenticated, loading, error };
+
+  const checkLogin = () => {
+    console.log('check login');
+    const userEmail = getLocalStorage('user', null);
+    const authToken = getLocalStorage('token', null);
+    if (userEmail || authToken) {
+      setLoginState(userEmail);
+      return true;
+    }
+    return false;
+  };
+
+  const setLoginState = (email: string) => {
+    setLogin({
+      user: { email: email },
+      state: LoginMachine.loggedIn,
+    });
+  };
+
+  const setInitialState = () => {
+    setLoading(true);
+    setAuthenticated(false);
+    setError(undefined);
+  };
+
+  return { fetchLogin, checkLogin, authenticated, loading, error };
 };
 
 export default useLogin;

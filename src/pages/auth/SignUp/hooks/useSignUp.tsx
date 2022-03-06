@@ -6,7 +6,7 @@ interface IUserSignUp extends IUser {
   passwordConfirmation: string;
 }
 
-interface SignUpResponse {
+interface ISignUpResponse {
   id: string;
   email: string;
 }
@@ -26,12 +26,11 @@ const useSignUp = () => {
     setLoading(true);
 
     axios
-      .post<IUserSignUp, SignUpResponse>('users', { user: user })
-      .then(({ id }: SignUpResponse) => {
+      .post<IUserSignUp, ISignUpResponse>('users', { user: user })
+      .then(({ id }: ISignUpResponse) => {
         if (id) setRegistered(true);
       })
       .catch((errors) => {
-        console.log(errors.response.data.errors);
         setErrors(errors.response.data.errors);
       })
       .finally(() => {

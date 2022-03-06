@@ -36,7 +36,7 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data: ISignUpDetails) => {
-    const userData = await fetchSignUp(data);
+    await fetchSignUp(data);
     if (registered) navigate('/login');
   };
 

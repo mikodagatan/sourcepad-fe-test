@@ -1,10 +1,17 @@
+import * as React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 
 import { BaseLayout } from 'layouts';
 import { Home, SignUp, LogIn, Profile, CreateProfile } from 'pages';
+import useLogin from 'pages/auth/LogIn/hooks/useLogin';
 
 const AppRoutes = () => {
+  const { checkLogin } = useLogin();
+  React.useEffect(() => {
+    checkLogin();
+  }, []);
+
   return (
     <RecoilRoot>
       <BrowserRouter>

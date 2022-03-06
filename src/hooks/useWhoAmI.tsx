@@ -3,6 +3,7 @@ import { axiosAuth } from 'config';
 import { useSetRecoilState } from 'recoil';
 
 import { profileState } from 'store';
+import { setLocalStorage } from 'utils';
 
 const useWhoAmI = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -15,11 +16,16 @@ const useWhoAmI = () => {
     const whoAmIdata = axiosAuth()
       .get('/whoami')
       .then((response) => {
+        setLocalStorage('userId', response.data.userId);
+        console.log('response whoami', response.data);
+
         if (!response.data.profile) return false;
         setProfileState(response.data.profile);
+        return true;
       })
       .catch((error) => {
         setError(error.response.data.errors);
+        return false;
       })
       .finally(() => {
         setLoading(false);
@@ -27,7 +33,6 @@ const useWhoAmI = () => {
 
     return whoAmIdata;
   };
-
   return { fetchWhoAmI, loading, error };
 };
 

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'react-simple-snackbar';
+import { snackbarDefault } from 'config';
 
 import { FormContainer, Input, Button, Logo, Alert } from 'components';
 import { ContainerLayout } from 'layouts';
-import { emailValidation, authErrors, getLocalStorage } from 'utils';
+import { emailValidation, authErrors } from 'utils';
 import { useNavigate } from 'react-router';
 import { SignUpLink } from '../shared/AuthLinks';
 import { IUser } from 'services';
@@ -14,8 +16,9 @@ import { useAuth } from 'hooks';
 
 const LogIn = () => {
   const navigate = useNavigate();
+  const [openSnackbar] = useSnackbar(snackbarDefault);
 
-  const { fetchLogin, checkLogin, loading: authenticating, error } = useAuth();
+  const { fetchLogin, loading: authenticating, error } = useAuth();
 
   const {
     register,
@@ -25,15 +28,16 @@ const LogIn = () => {
     mode: 'onChange',
   });
 
-  React.useEffect(() => {
-    if (checkLogin()) {
-      navigate('/profile');
-    }
-  }, []);
-
   const onSubmit = async (data: IUser) => {
     const result = await fetchLogin(data);
-    if (result) navigate('/profile');
+
+    if (!result?.loggedIn) return;
+
+    openSnackbar('Successfully logged in.');
+
+    if (result.loggedIn && result.profile) return navigate('/profile');
+
+    navigate('/profile/create');
   };
 
   return (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useWhoAmI from './hooks/useWhoAmI';
+import useWhoAmI from 'hooks/useWhoAmI';
 import { useRecoilValue } from 'recoil';
 import { useNavigate } from 'react-router';
 
@@ -10,15 +10,15 @@ const Profile = () => {
   const { fetchWhoAmI } = useWhoAmI();
   const profile = useRecoilValue(profileState);
 
-  React.useEffect(() => {
-    const asyncFunction = async () => {
-      await fetchWhoAmI();
-      if (!profile.id) navigate('/profile/create');
-    };
+  // React.useEffect(() => {
+  //   const asyncFunction = async () => {
+  //     await fetchWhoAmI();
+  //     if (!profile.id) navigate('/profile/create');
+  //   };
 
-    asyncFunction();
-    // @ts-ignore react-hooks/exhaustive-deps
-  }, []);
+  //   asyncFunction();
+  //   // @ts-ignore react-hooks/exhaustive-deps
+  // }, []);
 
   return (
     <div className="flex justify-center items-center h-noNav">

@@ -1,25 +1,34 @@
 import * as React from 'react';
 import { axios } from 'config';
 
-import { useSetRecoilState } from 'recoil';
-import { LoginMachine, loginMachine } from 'store';
+import { useSetRecoilState, useResetRecoilState } from 'recoil';
+import { LoginMachine, loginMachine, profileState } from 'store';
 import { getLocalStorage, setLocalStorage, clearLocalStorage } from 'utils';
 import { IUser } from 'services';
 
+import useWhoAmI from 'hooks/useWhoAmI';
+
 interface ILoginResponse {
   data: {
-    data: {
-      email: string;
-      authToken: string;
-      errors: string[];
-    };
+    data: ILoginData;
   };
 }
 
+interface ILoginData {
+  id: string;
+  email: string;
+  authToken: string;
+  errors: string[];
+}
+
 const useAuth = () => {
-  const setLogin = useSetRecoilState(loginMachine);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
+
+  const setLogin = useSetRecoilState(loginMachine);
+  const resetProfile = useResetRecoilState(profileState);
+
+  const { fetchWhoAmI } = useWhoAmI();
 
   const fetchLogin = async (user: IUser) => {
     // NOTE: Only able to catch the error using then-catch than catch-await.
@@ -29,13 +38,16 @@ const useAuth = () => {
 
     const result = axios
       .post<IUser, ILoginResponse>('signin', { credentials: user })
-      .then(({ data: { data: payload } }: ILoginResponse) => {
-        setAuthStates(payload.authToken, payload.email);
-        return true;
+      .then(async ({ data: { data: payload } }: ILoginResponse) => {
+        setAuthStates(payload);
+        console.log('login response', payload);
+
+        const whoami = await fetchWhoAmI();
+        return { loggedIn: true, profile: whoami };
       })
       .catch((error) => {
         setError(error.response?.statusText);
-        return false;
+        return { loggedIn: false, profile: false };
       })
       .finally(() => {
         setLoading(false);
@@ -49,10 +61,11 @@ const useAuth = () => {
     setError(undefined);
   };
 
-  const setAuthStates = (authToken: string, email: string) => {
-    setLocalStorage('token', authToken);
-    setLocalStorage('user', email);
-    setLoginState(email);
+  const setAuthStates = (payload: ILoginData) => {
+    setLocalStorage('token', payload.authToken);
+    setLocalStorage('user', payload.email);
+    setLoginState(payload.email);
+    console.log('login Auth state', localStorage?.user, localStorage?.token);
   };
 
   const setLoginState = (email: string) => {
@@ -77,7 +90,9 @@ const useAuth = () => {
       user: '',
       state: LoginMachine.guest,
     });
+    resetProfile();
     clearLocalStorage();
+    console.log('logout data', localStorage);
   };
 
   return { fetchLogin, checkLogin, logOut, loading, error };

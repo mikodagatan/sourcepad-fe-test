@@ -14,4 +14,5 @@ export interface IProfile {
 export interface IUser {
   email: string;
   password: string;
+  profile?: IProfile;
 }

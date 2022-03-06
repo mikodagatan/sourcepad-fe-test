@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'react-simple-snackbar';
+import { snackbarDefault } from 'config';
 
 import { Input, Button } from 'components';
 
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { profileCreateStep, profileState } from 'store';
 import {
   alphaValidation,
@@ -12,9 +14,16 @@ import {
   maxLengthValidation,
 } from 'utils';
 
+import useCreateProfile from './hooks/useCreateProfile';
+import { Profile } from 'pages';
+import { useNavigate } from 'react-router';
+
 const Step2 = () => {
+  const navigate = useNavigate();
   const setStep = useSetRecoilState(profileCreateStep);
-  const setProfile = useSetRecoilState(profileState);
+  const [profile, setProfile] = useRecoilState(profileState);
+  const [openSnackbar] = useSnackbar(snackbarDefault);
+  const { fetchCreateProfile, loading, errors: apiErrors } = useCreateProfile();
 
   const {
     register,
@@ -22,9 +31,13 @@ const Step2 = () => {
     formState: { errors },
   } = useForm({ mode: 'onChange' });
 
-  const onSubmit = (data) => {
-    setStep((prev) => prev + 1);
-    setProfile({ ...data });
+  const onSubmit = async (data) => {
+    const result = await fetchCreateProfile({ ...profile, ...data });
+    if (result) {
+      setProfile({ ...data });
+      openSnackbar('Profile successfully created');
+      navigate('/profile');
+    }
   };
 
   const handleBack = () => {
@@ -94,6 +107,7 @@ const Step2 = () => {
         <Button
           className="mt-4 bg-purple-500 px-10"
           onClick={handleSubmit(onSubmit)}
+          disabled={loading}
         >
           Submit
         </Button>

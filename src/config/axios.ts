@@ -1,4 +1,4 @@
-import axiosMain, { AxiosInstance } from 'axios';
+import axiosMain from 'axios';
 import applyCaseMiddleware from 'axios-case-converter';
 import { getLocalStorage } from 'utils';
 
@@ -11,15 +11,16 @@ const axios = applyCaseMiddleware(axiosBase);
 const axiosAuth = () => {
   const instance = axiosBase;
   const authToken = getLocalStorage('token', null);
+  console.log('axios authToken', authToken);
 
-  if (!authToken) return instance;
   instance.interceptors.request.use((request) => {
-    if (!request.headers) {
-      console.log('No config headers');
-      return request;
-    }
+    if (!authToken) return request;
 
-    request.headers.Authorization = authToken ? `Bearer ${authToken}` : '';
+    if (!request.headers) return request;
+
+    console.log('changing auth bearer');
+
+    request.headers.Authorization = `Bearer ${authToken}`;
     return request;
   });
 

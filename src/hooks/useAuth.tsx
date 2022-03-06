@@ -3,7 +3,7 @@ import { axios } from 'config';
 
 import { useSetRecoilState } from 'recoil';
 import { LoginMachine, loginMachine } from 'store';
-import { getLocalStorage, setLocalStorage } from 'utils';
+import { getLocalStorage, setLocalStorage, clearLocalStorage } from 'utils';
 import { IUser } from 'services';
 
 interface ILoginResponse {
@@ -16,7 +16,7 @@ interface ILoginResponse {
   };
 }
 
-const useLogin = () => {
+const useAuth = () => {
   const setLogin = useSetRecoilState(loginMachine);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [authenticated, setAuthenticated] = React.useState<boolean>(false);
@@ -31,9 +31,7 @@ const useLogin = () => {
     axios
       .post<IUser, ILoginResponse>('signin', { credentials: user })
       .then(({ data: { data: payload } }: ILoginResponse) => {
-        setLocalStorage('token', payload.authToken);
-        setLocalStorage('user', payload.email);
-        setLoginState(payload.email);
+        setAuthStates(payload.authToken, payload.email);
         setAuthenticated(true);
         console.log('auth', authenticated);
       })
@@ -45,8 +43,26 @@ const useLogin = () => {
       });
   };
 
+  const setInitialState = () => {
+    setLoading(true);
+    setAuthenticated(false);
+    setError(undefined);
+  };
+
+  const setAuthStates = (authToken: string, email: string) => {
+    setLocalStorage('token', JSON.stringify(authToken));
+    setLocalStorage('user', JSON.stringify(email));
+    setLoginState(email);
+  };
+
+  const setLoginState = (email: string) => {
+    setLogin({
+      user: email,
+      state: LoginMachine.loggedIn,
+    });
+  };
+
   const checkLogin = () => {
-    console.log('check login');
     const userEmail = getLocalStorage('user', null);
     const authToken = getLocalStorage('token', null);
     if (userEmail || authToken) {
@@ -56,20 +72,15 @@ const useLogin = () => {
     return false;
   };
 
-  const setLoginState = (email: string) => {
+  const logOut = () => {
     setLogin({
-      user: { email: email },
-      state: LoginMachine.loggedIn,
+      user: '',
+      state: LoginMachine.guest,
     });
+    clearLocalStorage();
   };
 
-  const setInitialState = () => {
-    setLoading(true);
-    setAuthenticated(false);
-    setError(undefined);
-  };
-
-  return { fetchLogin, checkLogin, authenticated, loading, error };
+  return { fetchLogin, checkLogin, logOut, authenticated, loading, error };
 };
 
-export default useLogin;
+export default useAuth;

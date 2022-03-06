@@ -1,4 +1,7 @@
 import { atom } from 'recoil';
+import { recoilPersist } from 'recoil-persist';
+
+const { persistAtom } = recoilPersist();
 
 export enum LoginMachine {
   guest = 'Guest',
@@ -8,9 +11,10 @@ export enum LoginMachine {
 export const loginMachine = atom({
   key: 'loginMachine',
   default: {
-    user: {},
+    user: '',
     state: LoginMachine.guest,
   },
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const userState = atom({

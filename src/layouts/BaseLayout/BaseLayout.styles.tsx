@@ -12,3 +12,11 @@ export const Navbar = tw.nav`
   bg-gray-100 
   shadow
 `;
+
+export const NavbarLeft = tw.div`
+  pl-4 
+`;
+
+export const NavbarRight = tw.div`
+  pr-4
+`;

@@ -1,16 +1,14 @@
-import * as React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import App from './App';
 import { BaseLayout } from 'layouts';
 import { Home, SignUp, LogIn, Profile, CreateProfile } from 'pages';
 
 const AppRoutes = () => {
-  const authenticated: boolean = !!localStorage.getItem('token');
-
   return (
-    <RecoilRoot>
-      <BrowserRouter>
-        <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<App />}>
           <Route path="/" element={<BaseLayout />}>
             <Route index element={<Home />} />
             <Route path="profile" element={<Profile />} />
@@ -18,9 +16,9 @@ const AppRoutes = () => {
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/profile/create" element={<CreateProfile />} />
-        </Routes>
-      </BrowserRouter>
-    </RecoilRoot>
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 };
 

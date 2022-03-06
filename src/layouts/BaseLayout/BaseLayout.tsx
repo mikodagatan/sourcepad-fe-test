@@ -1,35 +1,45 @@
-import { Outlet } from 'react-router-dom';
-import { Avatar } from 'components';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
+import { Avatar, Button } from 'components';
 import { useRecoilValue } from 'recoil';
-import { Link } from 'react-router-dom';
-
 import { LoginMachine, loginMachine } from 'store';
-import { Button } from 'components';
+import { useAuth } from 'hooks';
 
-import { Navbar } from './BaseLayout.styles';
+import { Navbar, NavbarLeft, NavbarRight } from './BaseLayout.styles';
 
 const BaseLayout = () => {
+  const navigate = useNavigate();
   const auth = useRecoilValue(loginMachine);
   const loggedIn = auth.state === LoginMachine.loggedIn;
+  const { logOut } = useAuth();
+
+  const handleLogOut = () => {
+    logOut();
+    navigate('/');
+  };
 
   return (
     <>
       <Navbar>
-        <div className="left pl-4 font-semibold">
-          {process.env.REACT_APP_SITENAME}
-        </div>
-        <div className="right pr-4">
+        <NavbarLeft>{process.env.REACT_APP_SITENAME}</NavbarLeft>
+        <NavbarRight>
           {loggedIn ? (
-            <div className="flex items-center">
-              <Avatar />
-              <span className="ml-2">Username</span>
+            <div className="flex space-x-4 items-center">
+              <div className="flex items-center">
+                <Avatar />
+                <span className="ml-2">Username</span>
+              </div>
+              <div>
+                <Button className="bg-gray-500" onClick={handleLogOut}>
+                  Log out
+                </Button>
+              </div>
             </div>
           ) : (
             <Link to="/login">
               <Button>Log in</Button>
             </Link>
           )}
-        </div>
+        </NavbarRight>
       </Navbar>
       <Outlet />
     </>

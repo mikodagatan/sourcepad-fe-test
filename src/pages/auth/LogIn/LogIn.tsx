@@ -10,7 +10,7 @@ import { IUser } from 'services';
 
 import { SiteName, Subheader } from '../shared';
 
-import useLogin from './hooks/useLogin';
+import { useAuth } from 'hooks';
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ const LogIn = () => {
     authenticated,
     loading: authenticating,
     error,
-  } = useLogin();
+  } = useAuth();
 
   const {
     register,

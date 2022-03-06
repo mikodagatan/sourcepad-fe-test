@@ -6,8 +6,6 @@ import { LoginMachine, loginMachine, profileState } from 'store';
 import { getLocalStorage, setLocalStorage, clearLocalStorage } from 'utils';
 import { IUser } from 'services';
 
-import useWhoAmI from 'hooks/useWhoAmI';
-
 interface ILoginResponse {
   data: {
     data: ILoginData;
@@ -26,9 +24,8 @@ const useAuth = () => {
   const [error, setError] = React.useState<string>();
 
   const setLogin = useSetRecoilState(loginMachine);
+  const resetLogin = useResetRecoilState(loginMachine);
   const resetProfile = useResetRecoilState(profileState);
-
-  const { fetchWhoAmI } = useWhoAmI();
 
   const fetchLogin = async (user: IUser) => {
     // NOTE: Only able to catch the error using then-catch than catch-await.
@@ -40,10 +37,7 @@ const useAuth = () => {
       .post<IUser, ILoginResponse>('signin', { credentials: user })
       .then(async ({ data: { data: payload } }: ILoginResponse) => {
         setAuthStates(payload);
-        console.log('login response', payload);
-
-        const whoami = await fetchWhoAmI();
-        return { loggedIn: true, profile: whoami };
+        return true;
       })
       .catch((error) => {
         setError(error.response?.statusText);
@@ -71,6 +65,7 @@ const useAuth = () => {
   const setLoginState = (email: string) => {
     setLogin({
       user: email,
+      userId: '',
       state: LoginMachine.loggedIn,
     });
   };
@@ -86,10 +81,7 @@ const useAuth = () => {
   };
 
   const logOut = () => {
-    setLogin({
-      user: '',
-      state: LoginMachine.guest,
-    });
+    resetLogin();
     resetProfile();
     clearLocalStorage();
     console.log('logout data', localStorage);

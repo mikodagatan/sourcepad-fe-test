@@ -11,8 +11,9 @@ const useCreateProfile = () => {
 
     const result = axiosAuth()
       .post('profiles', { profile: profile })
-      .then(({ data: { profile } }) => {
-        if (profile) return profile;
+      .then(({ data: profile }) => {
+        console.log('create profile success', profile);
+        if (profile.id) return true;
       })
       .catch((errors) => {
         setErrors(errors.response.data.errors);

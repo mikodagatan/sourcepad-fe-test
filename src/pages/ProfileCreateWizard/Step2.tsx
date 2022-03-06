@@ -5,8 +5,8 @@ import { snackbarDefault } from 'config';
 
 import { Input, Button } from 'components';
 
-import { useSetRecoilState, useRecoilState } from 'recoil';
-import { profileCreateStep, profileState } from 'store';
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import { loginMachine, profileCreateStep, profileState } from 'store';
 import {
   alphaValidation,
   numericValidation,
@@ -15,12 +15,12 @@ import {
 } from 'utils';
 
 import useCreateProfile from './hooks/useCreateProfile';
-import { Profile } from 'pages';
 import { useNavigate } from 'react-router';
 
 const Step2 = () => {
   const navigate = useNavigate();
   const setStep = useSetRecoilState(profileCreateStep);
+  const login = useRecoilValue(loginMachine);
   const [profile, setProfile] = useRecoilState(profileState);
   const [openSnackbar] = useSnackbar(snackbarDefault);
   const { fetchCreateProfile, loading, errors: apiErrors } = useCreateProfile();
@@ -32,9 +32,15 @@ const Step2 = () => {
   } = useForm({ mode: 'onChange' });
 
   const onSubmit = async (data) => {
-    const result = await fetchCreateProfile({ ...profile, ...data });
+    console.log('userId', login);
+    const result = await fetchCreateProfile({
+      ...profile,
+      ...data,
+      userId: login.userId,
+    });
+    console.log('change profile', result);
     if (result) {
-      setProfile({ ...data });
+      setProfile({ ...data, userId: login.userId });
       openSnackbar('Profile successfully created');
       navigate('/profile');
     }

@@ -10,15 +10,14 @@ const Profile = () => {
   const { fetchWhoAmI } = useWhoAmI();
   const profile = useRecoilValue(profileState);
 
-  // React.useEffect(() => {
-  //   const asyncFunction = async () => {
-  //     await fetchWhoAmI();
-  //     if (!profile.id) navigate('/profile/create');
-  //   };
+  React.useEffect(() => {
+    const asyncFunction = async () => {
+      const result = await fetchWhoAmI();
+      if (!result) navigate('/profile/create');
+    };
 
-  //   asyncFunction();
-  //   // @ts-ignore react-hooks/exhaustive-deps
-  // }, []);
+    asyncFunction();
+  }, []); // @ts-ignore react-hooks/exhaustive-deps
 
   return (
     <div className="flex justify-center items-center h-noNav">

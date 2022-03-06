@@ -31,13 +31,10 @@ const LogIn = () => {
   const onSubmit = async (data: IUser) => {
     const result = await fetchLogin(data);
 
-    if (!result?.loggedIn) return;
+    if (!result) return;
 
     openSnackbar('Successfully logged in.');
-
-    if (result.loggedIn && result.profile) return navigate('/profile');
-
-    navigate('/profile/create');
+    navigate('/profile');
   };
 
   return (

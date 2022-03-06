@@ -2,13 +2,14 @@ import * as React from 'react';
 import { axiosAuth } from 'config';
 import { useSetRecoilState } from 'recoil';
 
-import { profileState } from 'store';
+import { loginMachine, profileState } from 'store';
 import { setLocalStorage } from 'utils';
 
 const useWhoAmI = () => {
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string>();
   const setProfileState = useSetRecoilState(profileState);
+  const setLogin = useSetRecoilState(loginMachine);
 
   const fetchWhoAmI = async () => {
     setLoading(true);
@@ -16,11 +17,16 @@ const useWhoAmI = () => {
     const whoAmIdata = axiosAuth()
       .get('/whoami')
       .then((response) => {
-        setLocalStorage('userId', response.data.userId);
+        console.log('whoami user id', response.data);
+        setLocalStorage('userId', response.data.id);
+        setLogin((prev) => {
+          return { ...prev, userId: response.data.id };
+        });
         console.log('response whoami', response.data);
 
-        if (!response.data.profile) return false;
+        if (!response.data.profile.id) return false;
         setProfileState(response.data.profile);
+
         return true;
       })
       .catch((error) => {

@@ -13,12 +13,12 @@ const axiosAuth = () => {
   const authToken = getLocalStorage('token', null);
   console.log('axios authToken', authToken);
 
+  if (!authToken) return instance;
   instance.interceptors.request.use((request) => {
-    if (!authToken) return request;
-
-    if (!request.headers) return request;
-
-    console.log('changing auth bearer');
+    if (!request.headers) {
+      console.log('No config headers');
+      return request;
+    }
 
     request.headers.Authorization = `Bearer ${authToken}`;
     return request;

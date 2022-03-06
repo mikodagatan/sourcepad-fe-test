@@ -17,15 +17,12 @@ const useWhoAmI = () => {
     const whoAmIdata = axios
       .get('/whoami')
       .then((response) => {
-        console.log('whoami user id', response.data);
         setLocalStorage('userId', response.data.id);
         setLogin((prev) => {
           return { ...prev, userId: response.data.id };
         });
-        console.log('response whoami', response.data);
 
         if (!response.data.profile.id) return false;
-        console.log('changing profile whoami');
         setProfileState(response.data.profile);
 
         return true;

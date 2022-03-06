@@ -23,7 +23,7 @@ const Step2 = () => {
   const login = useRecoilValue(loginMachine);
   const [profile, setProfile] = useRecoilState(profileState);
   const [openSnackbar] = useSnackbar(snackbarDefault);
-  const { fetchCreateProfile, loading, errors: apiErrors } = useCreateProfile();
+  const { fetchCreateProfile, loading } = useCreateProfile();
 
   const {
     register,
@@ -32,13 +32,11 @@ const Step2 = () => {
   } = useForm({ mode: 'onChange', defaultValues: profile });
 
   const onSubmit = async (data) => {
-    console.log('userId', login);
     const result = await fetchCreateProfile({
       ...profile,
       ...data,
       userId: login.userId,
     });
-    console.log('change profile', result);
     if (result) {
       setProfile((prev) => {
         return { ...prev, ...data, userId: login.userId };

@@ -15,7 +15,6 @@ const useCreateProfile = () => {
     const result = axios
       .post('profiles', { profile: profile })
       .then(({ data: profile }) => {
-        console.log('create profile success', profile);
         if (profile.id) {
           setProfileState((prev) => {
             return { ...prev, id: profile.id };

@@ -12,7 +12,6 @@ function App() {
   const { fetchWhoAmI } = useWhoAmI();
 
   React.useEffect(() => {
-    console.log('starting', login);
     const checkLogin = async () => {
       const loggedIn = login.state === LoginMachine.loggedIn;
       if (!loggedIn) return navigate('/');

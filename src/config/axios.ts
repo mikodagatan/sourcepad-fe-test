@@ -11,7 +11,6 @@ const axios = applyCaseMiddleware(axiosBase);
 const requestHandler = (request) => {
   // NOTE: using any type because of JWT token problem if using AxiosRequestConfig<any>.
   const authToken = getLocalStorage('token', null);
-  console.log('axios request handler', authToken, localStorage);
   request.headers.Authorization = `Bearer ${authToken}`;
   return request;
 };

@@ -16,3 +16,7 @@ yarn start
 - Prettier
 - TailwindCSS + PostCSS
 - Recoil
+
+### Issues
+
+- [tailwind-styled-components: failed to parse source map.](https://issueantenna.com/repo/mathiasgilson/tailwind-styled-component/issues/42) - will get errors on yarn start. But, the package still works.

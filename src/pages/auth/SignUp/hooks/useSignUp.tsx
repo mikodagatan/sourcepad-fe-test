@@ -29,7 +29,6 @@ const useSignUp = () => {
     const result = axios
       .post<IUserSignUp, ISignUpResponse>('users', { user: user })
       .then(({ data: { id } }: ISignUpResponse) => {
-        console.log('id', id);
         if (id) return true;
       })
       .catch((errors) => {

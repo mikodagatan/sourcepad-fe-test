@@ -1,7 +1,5 @@
 import { useForm } from 'react-hook-form';
 
-import { slice } from 'lodash';
-
 import { Input, Button } from 'components';
 
 import { useSetRecoilState, useRecoilState } from 'recoil';
@@ -17,8 +15,6 @@ const Step1 = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: 'onChange', defaultValues: profile });
-
-  // slice(profile, 'firstName', 'lastName', 'phone')
 
   const onSubmit = (data) => {
     setStep((prev) => prev + 1);

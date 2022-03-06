@@ -1,4 +1,4 @@
-import { join, map } from 'lodash';
+import { join } from 'lodash';
 
 export const getErrors = (errors: string[] | undefined) => {
   if (!errors) return null;

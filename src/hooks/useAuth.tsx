@@ -57,7 +57,6 @@ const useAuth = () => {
     setLocalStorage('token', payload.authToken);
     setLocalStorage('user', payload.email);
     setLoginState(payload.email);
-    console.log('login Auth state', localStorage?.user, localStorage?.token);
   };
 
   const setLoginState = (email: string) => {
@@ -82,7 +81,6 @@ const useAuth = () => {
     resetLogin();
     resetProfile();
     clearLocalStorage();
-    console.log('logout data', localStorage);
   };
 
   return { fetchLogin, checkLogin, logOut, loading, error };

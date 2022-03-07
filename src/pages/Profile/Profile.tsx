@@ -1,29 +1,44 @@
-import * as React from 'react';
 import { useRecoilValue } from 'recoil';
+import { omit } from 'lodash';
+
+import { ContainerLayout } from 'layouts';
+import { FormContainer } from 'components';
 
 import { profileState } from 'store';
 
 const Profile = () => {
   const profile = useRecoilValue(profileState);
 
+  const profileItems = omit(profile, [
+    'id',
+    'userId',
+    'createdAt',
+    'updatedAt',
+  ]);
+
   if (profile.id) {
     return (
-      <div className="flex justify-center items-center h-noNav">
-        <div className="p-6 lg:max-w-[500px]  bg-purple-500 text-white rounded">
-          <div className="text-xl font-bold mb-4">Your Profile</div>
-          {Object.keys(profile).map((attr, index) => {
-            return (
-              <div
-                key={attr}
-                className="flex space-x-4 items-center justify-between"
-              >
-                <div className="text-xs font-bold">{attr}</div>
-                <div className="text-sm">{profile[attr]}</div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <ContainerLayout className="h-noNav">
+        <FormContainer className="min-w-[200px] sm:min-w-[400px] md:max-w-[500px]">
+          <div className="p-6  bg-purple-500 text-white rounded">
+            <div className="text-xl font-bold mb-4">Your Profile</div>
+            <table className="w-full">
+              <tbody>
+                {Object.keys(profileItems).map((attr, index) => {
+                  return (
+                    <tr key={attr}>
+                      <td className="text-xs font-bold">{attr}</td>
+                      <td className="text-sm pl-6 text-right">
+                        {profileItems[attr]}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </FormContainer>
+      </ContainerLayout>
     );
   }
 

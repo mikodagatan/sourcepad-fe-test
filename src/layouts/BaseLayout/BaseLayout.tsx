@@ -32,9 +32,11 @@ const BaseLayout = () => {
     <>
       <Navbar>
         <NavbarLeft>
-          <div className="text-lg font-bold flex items-center">
+          <div className="text-lg font-bold flex items-center justify-between">
             <Logo size="sm" />
-            <div className="pl-2">{process.env.REACT_APP_SITENAME}</div>
+            <div className="pl-2 hidden md:block">
+              {process.env.REACT_APP_SITENAME}
+            </div>
           </div>
         </NavbarLeft>
         <NavbarRight>

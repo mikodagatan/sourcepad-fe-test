@@ -7,7 +7,6 @@ export const Navbar = tw.nav`
   py-1
 
   flex 
-  flex-col
   md:flex-row
   justify-between 
   items-center

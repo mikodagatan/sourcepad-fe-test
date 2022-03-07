@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
-import { Country, City } from 'country-state-city';
 import { useSnackbar } from 'react-simple-snackbar';
 import { snackbarDefault } from 'config';
 
@@ -15,7 +14,6 @@ import { IProfile } from 'services';
 import { useCountries } from 'hooks';
 
 import {
-  alphaValidation,
   numericValidation,
   minLengthValidation,
   maxLengthValidation,
@@ -31,7 +29,6 @@ const Step2 = () => {
 
   const {
     register,
-    getValues,
     setValue,
     handleSubmit,
     formState: { errors },
@@ -39,40 +36,6 @@ const Step2 = () => {
 
   const { CountrySelector, CitySelector, selectedCountry, selectedCity } =
     useCountries({ setValue });
-
-  React.useEffect(() => {
-    console.log('change selected country', getValues('country'));
-  }, [selectedCountry]);
-
-  // const OldCountries = () => {
-  //   return (
-  //     <Input
-  //       name="country"
-  //       placeholder="Country"
-  //       error={errors.country?.message}
-  //       register={register({
-  //         required: 'This is a required field',
-  //         pattern: alphaValidation,
-  //       })}
-  //     />
-  //   );
-  // };
-
-  // const OldCities = () => {
-  //   return (
-  //     <Input
-  //       name="city"
-  //       placeholder="City"
-  //       error={errors.city?.message}
-  //       register={register({
-  //         required: 'This is a required field',
-  //         pattern: alphaValidation,
-  //         minLength: minLengthValidation(4),
-  //         maxLength: maxLengthValidation(100),
-  //       })}
-  //     />
-  //   );
-  // };
 
   const onSubmit = async (data: IProfile) => {
     const result = await fetchCreateProfile({
@@ -119,14 +82,14 @@ const Step2 = () => {
       <input
         type="hidden"
         name="city"
-        ref={register({ required: 'This is required' })}
+        ref={register({ required: 'This is a required field' })}
         value={selectedCity}
       />
       <CitySelector />
       <input
         type="hidden"
         name="country"
-        ref={register({ required: 'This is required' })}
+        ref={register({ required: 'This is a required field' })}
         value={selectedCountry}
       />
       <CountrySelector />
@@ -143,13 +106,13 @@ const Step2 = () => {
       />
       <div className="flex justify-between w-full">
         <Button
-          className="mt-4 bg-gray-400 hover:bg-gray-500 px-10"
+          className="mt-4 bg-gray-400 hover:bg-gray-500 px-4 md:px-10"
           onClick={handleBack}
         >
           Back
         </Button>
         <Button
-          className="mt-4 bg-purple-500 px-10"
+          className="mt-4 bg-purple-500 px-4 md:px-10"
           onClick={handleSubmit(onSubmit)}
           disabled={loading}
         >

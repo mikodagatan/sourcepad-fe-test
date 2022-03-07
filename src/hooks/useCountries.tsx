@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useFormContext } from 'react-hook-form';
 import { Country, City } from 'country-state-city';
 import { ICity } from 'country-state-city/dist/lib/interface';
 import {
@@ -17,7 +16,9 @@ const useCountries = ({ setValue }: useCountriesProps) => {
   const [selectedCountryCode, setSelectedCountryCode] =
     React.useState<string>('PH');
   const [selectedCity, setSelectedCity] = React.useState<string>('Manila');
-  const [cities, setCities] = React.useState<ICity[]>();
+  const [cities, setCities] = React.useState<ICity[] | undefined>(
+    City.getCitiesOfCountry('PH')
+  );
 
   const onChangeCountry = (e: React.FormEvent<HTMLSelectElement>) => {
     if (e.currentTarget.value) {

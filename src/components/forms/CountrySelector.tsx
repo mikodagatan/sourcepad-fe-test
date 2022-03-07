@@ -1,5 +1,4 @@
-import { Country, City } from 'country-state-city';
-import { ICity } from 'country-state-city/dist/lib/interface';
+import { Country } from 'country-state-city';
 import { SelectWrapper } from '.';
 
 interface CountrySelectorProps {

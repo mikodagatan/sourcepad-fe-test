@@ -7,6 +7,7 @@ interface FormContainerProps {
 const FormContainer = tw.nav<FormContainerProps>`
   h-fit 
   w-fit 
+  min-w-[300px]
   sm:max-w-[400px] 
   max-w-full
 

@@ -37,6 +37,7 @@ const Step2 = () => {
       ...data,
       userId: login.userId,
     });
+
     if (result) {
       setProfile((prev) => {
         return { ...prev, ...data, userId: login.userId };

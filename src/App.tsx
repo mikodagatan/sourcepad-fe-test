@@ -21,7 +21,7 @@ function App() {
       }
     };
     checkLogin();
-  }, [login.state]);
+  }, [login.state]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div>
       <Outlet />

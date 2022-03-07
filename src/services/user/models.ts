@@ -1,3 +1,9 @@
+export interface IUser {
+  email: string;
+  password: string;
+  profile?: IProfile;
+}
+
 export interface IProfile {
   id: string;
   userId: string;
@@ -9,10 +15,4 @@ export interface IProfile {
   firstName: string;
   lastName: string;
   phone: string;
-}
-
-export interface IUser {
-  email: string;
-  password: string;
-  profile?: IProfile;
 }

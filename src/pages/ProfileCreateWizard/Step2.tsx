@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
+import { Country, City } from 'country-state-city';
 import { useSnackbar } from 'react-simple-snackbar';
 import { snackbarDefault } from 'config';
 
@@ -7,15 +8,18 @@ import { Input, Button } from 'components';
 
 import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
 import { loginMachine, profileCreateStep, profileState } from 'store';
+
+import useCreateProfile from './hooks/useCreateProfile';
+import { useNavigate } from 'react-router';
+import { IProfile } from 'services';
+import { useCountries } from 'hooks';
+
 import {
   alphaValidation,
   numericValidation,
   minLengthValidation,
   maxLengthValidation,
 } from 'utils';
-
-import useCreateProfile from './hooks/useCreateProfile';
-import { useNavigate } from 'react-router';
 
 const Step2 = () => {
   const navigate = useNavigate();
@@ -27,11 +31,50 @@ const Step2 = () => {
 
   const {
     register,
+    getValues,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm({ mode: 'onChange', defaultValues: profile });
 
-  const onSubmit = async (data) => {
+  const { CountrySelector, CitySelector, selectedCountry, selectedCity } =
+    useCountries({ setValue });
+
+  React.useEffect(() => {
+    console.log('change selected country', getValues('country'));
+  }, [selectedCountry]);
+
+  // const OldCountries = () => {
+  //   return (
+  //     <Input
+  //       name="country"
+  //       placeholder="Country"
+  //       error={errors.country?.message}
+  //       register={register({
+  //         required: 'This is a required field',
+  //         pattern: alphaValidation,
+  //       })}
+  //     />
+  //   );
+  // };
+
+  // const OldCities = () => {
+  //   return (
+  //     <Input
+  //       name="city"
+  //       placeholder="City"
+  //       error={errors.city?.message}
+  //       register={register({
+  //         required: 'This is a required field',
+  //         pattern: alphaValidation,
+  //         minLength: minLengthValidation(4),
+  //         maxLength: maxLengthValidation(100),
+  //       })}
+  //     />
+  //   );
+  // };
+
+  const onSubmit = async (data: IProfile) => {
     const result = await fetchCreateProfile({
       ...profile,
       ...data,
@@ -39,7 +82,7 @@ const Step2 = () => {
     });
 
     if (result) {
-      setProfile((prev) => {
+      setProfile((prev: IProfile) => {
         return { ...prev, ...data, userId: login.userId };
       });
       openSnackbar('Profile successfully created');
@@ -73,26 +116,20 @@ const Step2 = () => {
           maxLength: maxLengthValidation(100),
         })}
       />
-      <Input
+      <input
+        type="hidden"
         name="city"
-        placeholder="City"
-        error={errors.city?.message}
-        register={register({
-          required: 'This is a required field',
-          pattern: alphaValidation,
-          minLength: minLengthValidation(4),
-          maxLength: maxLengthValidation(100),
-        })}
+        ref={register({ required: 'This is required' })}
+        value={selectedCity}
       />
-      <Input
+      <CitySelector />
+      <input
+        type="hidden"
         name="country"
-        placeholder="Country"
-        error={errors.country?.message}
-        register={register({
-          required: 'This is a required field',
-          pattern: alphaValidation,
-        })}
+        ref={register({ required: 'This is required' })}
+        value={selectedCountry}
       />
+      <CountrySelector />
       <Input
         name="zipCode"
         placeholder="Zip code"

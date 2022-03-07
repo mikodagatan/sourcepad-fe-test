@@ -4,6 +4,8 @@ import { Input, Button } from 'components';
 
 import { useSetRecoilState, useRecoilState } from 'recoil';
 import { profileCreateStep, profileState } from 'store';
+import { IProfile } from 'services';
+
 import { alphaValidation, phoneNumberValidation } from 'utils';
 
 const Step1 = () => {
@@ -16,7 +18,7 @@ const Step1 = () => {
     formState: { errors },
   } = useForm({ mode: 'onChange', defaultValues: profile });
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: IProfile) => {
     setStep((prev) => prev + 1);
     setProfile({ ...profile, ...data });
   };

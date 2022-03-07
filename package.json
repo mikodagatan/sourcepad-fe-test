@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.2",
     "axios": "^0.26.0",
     "axios-case-converter": "^0.9.0",
+    "country-state-city": "^3.0.1",
     "lodash": "^4.17.21",
     "postcss": "^8.4.7",
     "postcss-flexbugs-fixes": "^5.0.2",

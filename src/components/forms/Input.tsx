@@ -12,6 +12,9 @@ interface InputProps
   className?: string;
 }
 
+export const inputDefaultClasses =
+  'rounded border border-gray-300 focus-visible:border-purple-500 px-4 py-3 outline-none hover:bg-gray-50 text-gray-700';
+
 const Input = ({
   name,
   label,
@@ -25,7 +28,7 @@ const Input = ({
       {label && <label className="text-sm font-semibold mb-0">{label}</label>}
       <input
         name={name}
-        className={`rounded border border-gray-300 focus-visible:border-purple-500 px-4 py-3 outline-none hover:bg-gray-50 text-gray-700 ${className}`}
+        className={`${inputDefaultClasses} ${className}`}
         ref={register}
         {...rest}
       />

@@ -24,7 +24,7 @@ const Profile = () => {
             <div className="text-xl font-bold mb-4">Your Profile</div>
             <table className="w-full">
               <tbody>
-                {Object.keys(profileItems).map((attr, index) => {
+                {Object.keys(profileItems).map((attr) => {
                   return (
                     <tr key={attr}>
                       <td className="text-xs font-bold">{attr}</td>
